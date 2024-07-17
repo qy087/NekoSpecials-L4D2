@@ -10,9 +10,9 @@ Specials plugin that can be customized in real time!<br>
 <br>
 
 <!-- links -->
-[forks-shield]: https://img.shields.io/github/forks/shaojintian/Best_README_template.svg?style=flat-square
+[forks-shield]: https://img.shields.io/github/forks/himenekocn/NekoSpecials-L4D2.svg?style=flat-square
 [forks-url]: https://github.com/himenekocn/NekoSpecials-L4D2/fork
-[stars-shield]: https://img.shields.io/github/stars/shaojintian/Best_README_template.svg?style=flat-square
+[stars-shield]: https://img.shields.io/github/stars/himenekocn/NekoSpecials-L4D2.svg?style=flat-square
 [stars-url]: https://github.com/himenekocn/NekoSpecials-L4D2/stargazers
 
 官网[点我跳转](https://himeneko.cn/nekospecials)<br>
@@ -22,6 +22,7 @@ Specials plugin that can be customized in real time!<br>
 - [使用注意](#使用注意)
 - [安装前系统方面的准备](#安装前系统方面的准备)
 - [插件安装](#插件安装)
+- [插件CFG位置](#插件CFG位置)
 - [插件推荐平台](#插件推荐平台)
 - [插件模块介绍](#插件模块介绍)
 - [玩家指令](#玩家指令)
@@ -49,6 +50,14 @@ linux系统输入<br>
 4.下载[插件(点我开始下载)](https://mirror.ghproxy.com/https://github.com/himenekocn/NekoSpecials-L4D2/archive/refs/heads/NS7-SM1.11+.zip)，将插件拖到服务器的left4dead2文件夹中覆盖<br>
 5.启动一次服务器检查是否全部加载
 6.修改插件对应cfg，CFG文件均为自动生成，请先执行第五步
+
+# 插件CFG位置
+多特配置：服务器目录/left4dead2/cfg/sourcemod/Neko_Specials_binhooks.cfg<br>
+HUD配置：服务器目录/left4dead2/cfg/sourcemod/Neko_KillHud_binhooks.cfg<br>
+服名配置：服务器目录/left4dead2/cfg/sourcemod/Neko_ServerName.cfg<br>
+投票配置：服务器目录/left4dead2/cfg/sourcemod/Neko_VoteMenu.cfg<br>
+<br>
+HUD内容&服名内容的更改：服务器目录/left4dead2/addons/sourcemod/data/nekocustom.cfg
 
 # 注意：插件不生效请查看错误日志输入，日志在addons/sourcemod/logs里面，error开头就是
 

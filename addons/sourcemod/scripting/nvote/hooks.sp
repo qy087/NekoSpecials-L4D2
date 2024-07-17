@@ -21,21 +21,19 @@ public Action ChatListener(int client, const char[] command, int args)
 	if (!IsValidClient(client) || IsFakeClient(client) || IsChatTrigger())
 		return Plugin_Continue;
 
-	char msg[128];
-
-	GetCmdArgString(msg, sizeof(msg));
-	StripQuotes(msg);
-
-	if (!NativeVotes_IsNewVoteAllowed())
-	{
-		PrintToChat(client, "\x05%s \x04%d秒后才能开始投票", NEKOTAG, NativeVotes_CheckVoteDelay());
-		cleanplayerwait(client);
-		return Plugin_Continue;
-	}
-
 	if (BoolWaitForVoteItems[client])
 	{
-		int DD;
+		if (!NativeVotes_IsNewVoteAllowed())
+		{
+			PrintToChat(client, "\x05%s \x04%d秒后才能开始投票", NEKOTAG, NativeVotes_CheckVoteDelay());
+			cleanplayerwait(client);
+			return Plugin_Continue;
+		}
+
+		char msg[128];
+
+		GetCmdArgString(msg, sizeof(msg));
+		StripQuotes(msg);
 
 		if (StrEqual(msg, "!cancel"))
 		{
@@ -44,14 +42,6 @@ public Action ChatListener(int client, const char[] command, int args)
 			cleanplayerchar(client);
 			return Plugin_Continue;
 		}
-
-		if (!IsInteger(msg))
-		{
-			PrintToChat(client, "\x05%s \x04输入有误 \x03请检查", NEKOTAG);
-			return Plugin_Continue;
-		}
-		else
-			DD = StringToInt(msg);
 
 		int	 DDMax, DDMin;
 		char FChar[128];
@@ -87,7 +77,7 @@ public Action ChatListener(int client, const char[] command, int args)
 			Format(FChar, sizeof FChar, "玩家增加数量");
 		}
 
-		if (DD < DDMin || DD > DDMax)
+		if (GetCmdArgInt(0) < DDMin || GetCmdArgInt(0) > DDMax)
 		{
 			PrintToChat(client, "\x05%s \x04输入的%s有误，请重试 \x03范围[%d - %d]", NEKOTAG, FChar, DDMin, DDMax);
 			return Plugin_Continue;
@@ -95,7 +85,7 @@ public Action ChatListener(int client, const char[] command, int args)
 		else
 		{
 			VoteMenuItems[client]	  = WaitForVoteItems[client];
-			VoteMenuItemValue[client] = DD;
+			VoteMenuItemValue[client] = GetCmdArgInt(0);
 			StartVoteYesNo(client);
 		}
 

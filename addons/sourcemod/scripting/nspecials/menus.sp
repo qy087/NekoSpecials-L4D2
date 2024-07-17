@@ -17,24 +17,6 @@ public Menu SpecialMenu(int client)
 
 	if (NCvar[CSpecial_PluginStatus].BoolValue)
 	{
-		Format(line, sizeof(line), "随机特感状态 [%s]", !NCvar[CSpecial_Random_Mode].BoolValue ? "关" : "开");
-		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgrandom", line);
-
-		Format(line, sizeof(line), "快速反应状态 [%s]", !GetSpecialAssault() ? "关" : "开");
-		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfast", line);
-
-		Format(line, sizeof(line), "特感游戏模式 [%s]", SpecialName[NCvar[CSpecial_Default_Mode].IntValue]);
-		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgmode", line);
-
-		Format(line, sizeof(line), "特感刷新模式 [%s]", SpawnModeName[GetSpecialSpawnMode()]);
-		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgspawn", line);
-
-		if (GetSpecialSpawnMode() != 0)
-		{
-			Format(line, sizeof(line), "刷特子模式 [%d]", NCvar[CSpecial_IsModeInNormal].IntValue);
-			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("ismodenormal", line);
-		}
-
 		Format(line, sizeof(line), "全局刷特时间 [%ds]", NCvar[CSpecial_Spawn_Time].IntValue);
 		if (!NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue)
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgtime", line);
@@ -53,13 +35,31 @@ public Menu SpecialMenu(int client)
 		Format(line, sizeof(line), "玩家增加数量 [%d]", NCvar[CSpecial_PlayerAdd].IntValue);
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgpadd", line);
 
-		Format(line, sizeof(line), "是否算入观察 [%s]", !NCvar[CSpecial_PlayerCountSpec].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "不算观察玩家 [%s]", NCvar[CSpecial_PlayerCountSpec].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgpcspec", line);
 
-		Format(line, sizeof(line), "不算死亡玩家 [%s]", !NCvar[CSpecial_Num_NotCul_Death].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "不算死亡玩家 [%s]", NCvar[CSpecial_Num_NotCul_Death].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgnculdea", line);
 
-		Format(line, sizeof(line), "克存活时刷特 [%s]", !NCvar[CSpecial_Spawn_Tank_Alive].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "特感快速反应 [%s]", !GetSpecialAssault() ? "关" : "开");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfast", line);
+
+		Format(line, sizeof(line), "随机特感模式 [%s]", !NCvar[CSpecial_Random_Mode].BoolValue ? "关" : "开");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgrandom", line);
+
+		Format(line, sizeof(line), "特感游戏模式 [%s]", SpecialName[NCvar[CSpecial_Default_Mode].IntValue]);
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgmode", line);
+
+		Format(line, sizeof(line), "特感刷新模式 [%s]", SpawnModeName[GetSpecialSpawnMode()]);
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgspawn", line);
+
+		if (GetSpecialSpawnMode() != 0)
+		{
+			Format(line, sizeof(line), "刷特子模式 [%d]", GetSpecialSpawnSubMode());
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("ismodenormal", line);
+		}
+
+		Format(line, sizeof(line), "坦克存活时刷特 [%s]", NCvar[CSpecial_Spawn_Tank_Alive].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgtanklive", line);
 
 		if (!NCvar[CSpecial_Spawn_Tank_Alive].BoolValue)
@@ -68,10 +68,10 @@ public Menu SpecialMenu(int client)
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgtankprolive", line);
 		}
 
-		Format(line, sizeof(line), "踢出卡住特感 [%s]", !NCvar[CSpecial_AutoKill_StuckSpecials].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "踢出卡住特感 [%s]", NCvar[CSpecial_AutoKill_StuckSpecials].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgautokick", line);
 
-		Format(line, sizeof(line), "根据难度改变刷特时间 [%s]", !NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "根据难度改变刷特时间 [%s]", NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgautotime", line);
 
 		if (NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue)
@@ -92,7 +92,7 @@ public Menu SpecialMenu(int client)
 		Format(line, sizeof(line), "特感种类数量 [默认模式]");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgcustom", line);
 
-		Format(line, sizeof(line), "特感刷新几率");
+		Format(line, sizeof(line), "特感刷新概率");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgcustomweight", line);
 
 		if (GetSpecialSpawnMode() > 1)
@@ -124,10 +124,40 @@ public Menu SpecialMenu(int client)
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgcustommindisreset", line);
 		}
 
-		Format(line, sizeof(line), "显示插件提示 [%s]", !NCvar[CSpecial_Show_Tips].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "防玩家跑图机制 [%s]", NCvar[CSpecial_Catch_FastPlayer].BoolValue ? "是" : "否");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfastplayer", line);
+
+		if (NCvar[CSpecial_Catch_FastPlayer].BoolValue)
+		{
+			Format(line, sizeof(line), "最快玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_FastPlayer_CheckDistance].FloatValue);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfastplayerdis", line);
+		}
+
+		Format(line, sizeof(line), "防玩家掉队机制 [%s]", NCvar[CSpecial_Catch_SlowestPlayer].BoolValue ? "是" : "否");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgslowplayer", line);
+
+		if (NCvar[CSpecial_Catch_SlowestPlayer].BoolValue)
+		{
+			Format(line, sizeof(line), "掉队玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].FloatValue);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgslowplayerdis", line);
+		}
+
+		Format(line, sizeof(line), "摸鱼玩家身边刷特 [%s]", NCvar[CSpecial_Check_IsPlayerNotInCombat].BoolValue ? "是" : "否");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgcheckidleplayer", line);
+
+		Format(line, sizeof(line), "特感优先攻击被喷胆汁玩家 [%s]", NCvar[CSpecial_Check_IsPlayerBiled].BoolValue ? "是" : "否");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgcheckbiledplayer", line);
+
+		if (NCvar[CSpecial_Check_IsPlayerBiled].BoolValue)
+		{
+			Format(line, sizeof(line), "检测被喷胆汁玩家的间隔 [%0.fs]", NCvar[CSpecial_CheckGame_Time].FloatValue);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgchecktime", line);
+		}
+
+		Format(line, sizeof(line), "显示插件提示 [%s]", NCvar[CSpecial_Show_Tips].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgtips", line);
 
-		Format(line, sizeof(line), "使用聊天框提示 [%s]", !NCvar[CSpecial_Show_Tips_Chat].BoolValue ? "否" : "是");
+		Format(line, sizeof(line), "使用聊天框提示 [%s]", NCvar[CSpecial_Show_Tips_Chat].BoolValue ? "是" : "否");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgtipschat", line);
 	}
 
@@ -164,13 +194,9 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 				bool NeedOpenMenu = true;
 
 				if (StrEqual(items, "tgstat"))
-				{
 					SwitchPlugin(client);
-				}
 				if (StrEqual(items, "tgrandom"))
-				{
 					SwitchRandom(client);
-				}
 				if (StrEqual(items, "tgmode"))
 				{
 					SpecialMenuMode(client);
@@ -245,13 +271,9 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
 				}
 				if (StrEqual(items, "tgcustommaxdisreset"))
-				{
 					SetSpecialSpawnMaxDis_default();
-				}
 				if (StrEqual(items, "tgcustommindisreset"))
-				{
 					SetSpecialSpawnMinDis_default();
-				}
 				if (StrEqual(items, "tgcustommaxdis"))
 				{
 					SpecialMenuCustomMaxDis(client).Display(client, MENU_TIME);
@@ -286,13 +308,32 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 				if (StrEqual(items, "tgautotime"))
 					NCvar[CSpecial_Spawn_Time_DifficultyChange].SetBool(!NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue);
 				if (StrEqual(items, "ismodenormal"))
+					SpecialMenuSubMode(client);
+				if (StrEqual(items, "tgfastplayer"))
+					NCvar[CSpecial_Catch_FastPlayer].SetBool(!NCvar[CSpecial_Catch_FastPlayer].BoolValue);
+				if (StrEqual(items, "tgslowplayer"))
+					NCvar[CSpecial_Catch_SlowestPlayer].SetBool(!NCvar[CSpecial_Catch_SlowestPlayer].BoolValue);
+				if (StrEqual(items, "tgfastplayerdis"))
 				{
-					if (NCvar[CSpecial_IsModeInNormal].IntValue == 1)
-						NCvar[CSpecial_IsModeInNormal].SetInt(2);
-					else
-						NCvar[CSpecial_IsModeInNormal].SetInt(1);
-					if (NCvar[CSpecial_Show_Tips].BoolValue)
-						ModeTips();
+					N_ClientItem[client].WaitingForTgFastPDis = true;
+					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置最大距离 \x03范围[100.0 至 10000.0]", NEKOTAG);
+					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
+				}
+				if (StrEqual(items, "tgslowplayerdis"))
+				{
+					N_ClientItem[client].WaitingForTgSlowPDis = true;
+					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置最大距离 \x03范围[100.0 至 10000.0]", NEKOTAG);
+					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
+				}
+				if (StrEqual(items, "tgcheckbiledplayer"))
+					NCvar[CSpecial_Check_IsPlayerBiled].SetBool(!NCvar[CSpecial_Check_IsPlayerBiled].BoolValue);
+				if (StrEqual(items, "tgcheckidleplayer"))
+					NCvar[CSpecial_Check_IsPlayerNotInCombat].SetBool(!NCvar[CSpecial_Check_IsPlayerNotInCombat].BoolValue);
+				if (StrEqual(items, "tgchecktime"))
+				{
+					N_ClientItem[client].WaitingForTgCheckTime = true;
+					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置的检查间隔 \x03范围[0.1 至 5.0]", NEKOTAG);
+					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
 				}
 				if (StrEqual(items, "tgfilewr"))
 					UpdateConfigFile(false);
@@ -307,6 +348,59 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 			delete menu;
 			if (IsValidClient(client))
 				N_ClientMenu[client].Reset();
+		}
+	}
+	return 0;
+}
+
+public Action SpecialMenuSubMode(int client)
+{
+	Menu menu = new Menu(SpecialMenuSubModeHandler);
+	char line[1024];
+
+	Format(line, sizeof(line), "+|NS|+ 选择刷特子模式\n选择一个模式");
+	menu.SetTitle(line);
+
+	Format(line, sizeof(line), "子模式1");
+	menu.AddItem("1", line);
+	Format(line, sizeof(line), "子模式2");
+	menu.AddItem("2", line);
+
+	menu.ExitBackButton = true;
+	menu.Display(client, MENU_TIME);
+	return Plugin_Handled;
+}
+
+public int SpecialMenuSubModeHandler(Menu menu, MenuAction action, int client, int selection)
+{
+	switch (action)
+	{
+		case MenuAction_Select:
+		{
+			if (IsValidClient(client))
+			{
+				N_ClientMenu[client].Reset();
+				char items[30];
+				menu.GetItem(selection, items, sizeof(items));
+				NCvar[CSpecial_IsModeInNormal].SetInt(StringToInt(items, sizeof(items)));
+
+				if (NCvar[CSpecial_Show_Tips].BoolValue)
+					ModeTips();
+
+				SpecialMenu(client).DisplayAt(client, N_ClientMenu[client].MenuPageItem, MENU_TIME);
+			}
+		}
+		case MenuAction_Cancel:
+		{
+			if (IsValidClient(client) && selection == MenuCancel_ExitBack)
+			{
+				N_ClientMenu[client].Reset();
+				SpecialMenu(client).DisplayAt(client, N_ClientMenu[client].MenuPageItem, MENU_TIME);
+			}
+		}
+		case MenuAction_End:
+		{
+			delete menu;
 		}
 	}
 	return 0;
@@ -388,14 +482,16 @@ public Action SpecialMenuSpawn(int client)
 	Format(line, sizeof(line), "+|NS|+ 选择刷特模式\n选择一个模式");
 	menu.SetTitle(line);
 
-	Format(line, sizeof(line), "引擎刷特");
+	Format(line, sizeof(line), "导演模式");
 	menu.AddItem("0", line);
-	Format(line, sizeof(line), "普通刷特");
+	Format(line, sizeof(line), "普通模式");
 	menu.AddItem("1", line);
-	Format(line, sizeof(line), "噩梦刷特");
+	Format(line, sizeof(line), "噩梦模式");
 	menu.AddItem("2", line);
-	Format(line, sizeof(line), "地狱刷特");
+	Format(line, sizeof(line), "地狱模式");
 	menu.AddItem("3", line);
+	Format(line, sizeof(line), "可变模式");
+	menu.AddItem("4", line);
 
 	menu.ExitBackButton = true;
 	menu.Display(client, MENU_TIME);
@@ -416,7 +512,7 @@ public int SpecialMenuSpawnHandler(Menu menu, MenuAction action, int client, int
 				int ModeNum = StringToInt(items, sizeof(items));
 				NCvar[CSpecial_Spawn_Mode].SetInt(ModeNum);
 				SetSpecialSpawnMode(ModeNum);
-				PrintToChatAll("\x05%s \x04特感刷新方式更改为 \x03%s刷特模式", NEKOTAG, SpawnModeName[ModeNum]);
+				PrintToChatAll("\x05%s \x04特感刷新方式更改为 \x03%s刷特", NEKOTAG, SpawnModeName[ModeNum]);
 				SpecialMenu(client).DisplayAt(client, N_ClientMenu[client].MenuPageItem, MENU_TIME);
 			}
 		}

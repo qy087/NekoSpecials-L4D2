@@ -11,7 +11,6 @@
 #include "nvote/globals.sp"
 
 #define PLUGIN_CONFIG "Neko_VoteMenu"
-#define NEKOTAG		  "[NS]"
 
 public Plugin myinfo =
 {

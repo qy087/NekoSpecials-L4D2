@@ -1,6 +1,8 @@
 
 void CheckDifficulty(bool ShowTips = true)
 {
+	Call_StartForward(N_Forward_OnSetSpecialsTime);
+
 	if (NCvar[CSpecial_Spawn_Time_DifficultyChange].BoolValue)
 	{
 		char NowDifficulty[64];
@@ -18,7 +20,6 @@ void CheckDifficulty(bool ShowTips = true)
 	else
 		SetSpecialRespawnInterval(NCvar[CSpecial_Spawn_Time].IntValue);
 
-	Call_StartForward(N_Forward_OnSetSpecialsTime);
 	Call_Finish();
 
 	if (ShowTips)

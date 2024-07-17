@@ -1,4 +1,4 @@
-#define PLUGIN_VERSION "6.32NS"
+#define PLUGIN_VERSION "7.01NS"
 
 // AdminMenu
 /**
@@ -29,6 +29,14 @@ native int	   NekoKillHud_GetStyle();
 native Handle  NekoServerName_PlHandle();
 
 forward Handle NekoServerName_OnChangeServerName();
+
+/**
+ * Change your custom Text.
+ *
+ * @param Text	        What you want to display.
+ * @return				NULL.
+ */
+native void	   NekoServerName_ChangeCustomTest(const char[] Text);
 
 // VoteMenu
 /**

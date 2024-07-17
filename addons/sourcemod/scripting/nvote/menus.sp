@@ -43,29 +43,10 @@ public Menu NekoVoteMenu(int client)
 		Format(line, sizeof(line), "克活着时刷新 [%s]", !GCvar[CSpecial_Spawn_Tank_Alive].BoolValue ? "否" : "是");
 		N_MenuVoteMenu[client].AddItem("tgtanklive", line, !NCvar[Neko_SwitchTankAlive].BoolValue ? ITEMDRAW_DISABLED : itemsflags);
 
-		char nowmode[64], spawnmode[64];
-
-		switch (GCvar[CSpecial_Default_Mode].IntValue)
-		{
-			case 1: Format(nowmode, sizeof(nowmode), "猎人");
-			case 2: Format(nowmode, sizeof(nowmode), "牛子");
-			case 3: Format(nowmode, sizeof(nowmode), "猴子");
-			case 4: Format(nowmode, sizeof(nowmode), "口水");
-			case 5: Format(nowmode, sizeof(nowmode), "胖子");
-			case 6: Format(nowmode, sizeof(nowmode), "舌头");
-			default: Format(nowmode, sizeof(nowmode), "默认");
-		}
-		Format(line, sizeof(line), "特感游戏模式 [%s]", nowmode);
+		Format(line, sizeof(line), "特感游戏模式 [%s]", SpecialName[NCvar[CSpecial_Default_Mode].IntValue]);
 		N_MenuVoteMenu[client].AddItem("tgmode", line, !NCvar[Neko_SwitchGameMode].BoolValue ? ITEMDRAW_DISABLED : itemsflags);
 
-		switch (NekoSpecials_GetSpawnMode())
-		{
-			case 0: Format(spawnmode, sizeof(spawnmode), "引擎");
-			case 1: Format(spawnmode, sizeof(spawnmode), "普通");
-			case 2: Format(spawnmode, sizeof(spawnmode), "噩梦");
-			case 3: Format(spawnmode, sizeof(spawnmode), "地狱");
-		}
-		Format(line, sizeof(line), "特感刷新模式 [%s]", spawnmode);
+		Format(line, sizeof(line), "特感刷新模式 [%s]", SpawnModeName[GetSpecialSpawnMode()]);
 		N_MenuVoteMenu[client].AddItem("tgspawn", line, !NCvar[Neko_SwitchSpawnMode].BoolValue ? ITEMDRAW_DISABLED : itemsflags);
 
 		Format(line, sizeof(line), "随机特感状态 [%s]", !GCvar[CSpecial_Random_Mode].BoolValue ? "关" : "开");
@@ -231,7 +212,7 @@ public Action SpecialMenuSpawn(int client)
 	Format(line, sizeof(line), "+|NS|+ 选择刷特模式\n选择一个模式");
 	menu.SetTitle(line);
 
-	Format(line, sizeof(line), "引擎刷特");
+	Format(line, sizeof(line), "导演刷特");
 	menu.AddItem("0", line);
 	Format(line, sizeof(line), "普通刷特");
 	menu.AddItem("1", line);
@@ -239,6 +220,8 @@ public Action SpecialMenuSpawn(int client)
 	menu.AddItem("2", line);
 	Format(line, sizeof(line), "地狱刷特");
 	menu.AddItem("3", line);
+	Format(line, sizeof(line), "可变刷特");
+	menu.AddItem("4", line);
 
 	menu.ExitBackButton = true;
 	menu.Display(client, MENU_TIME);

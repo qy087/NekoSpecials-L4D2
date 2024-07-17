@@ -50,10 +50,10 @@ public Action OnPlayerStuck(int client)
 {
 	if (IsValidClient(client) && IsPlayerAlive(client) && GetClientTeam(client) == 3 && IsFakeClient(client))
 	{
-		if(IsPlayerTank(client) && !NCvar[CSpecial_AutoKill_StuckTank].BoolValue)
+		if (IsPlayerTank(client) && !NCvar[CSpecial_AutoKill_StuckTank].BoolValue)
 			return Plugin_Continue;
 
-		if(!NCvar[CSpecial_AutoKill_StuckSpecials].BoolValue)
+		if (!NCvar[CSpecial_AutoKill_StuckSpecials].BoolValue)
 			return Plugin_Continue;
 
 		KickClient(client, "Infected Stuck");
@@ -88,6 +88,41 @@ public Action BinHook_OnSpawnSpecial()
 
 	if (NCvar[CSpecial_Random_Mode].BoolValue)
 		TgModeStartSet();
+
+	if (NCvar[CSpecial_Catch_FastPlayer].BoolValue)
+	{
+		int client = GetHighestFlowSurvivor();
+		if (IsValidClient(client) && IsPlayerAlive(client))
+		{
+			if (GetCurrentFlowDistanceForPlayer(client) - GetAverageSurvivorFlowDistance() >= NCvar[CSpecial_Catch_FastPlayer_CheckDistance].FloatValue)
+			{
+				SetSpecialSpawnClient(client);
+			}
+		}
+	}
+
+	if (NCvar[CSpecial_Catch_SlowestPlayer].BoolValue)
+	{
+		int client = GetLowestFlowSurvivor();
+		if (IsValidClient(client) && IsPlayerAlive(client))
+		{
+			if (GetAverageSurvivorFlowDistance() - GetCurrentFlowDistanceForPlayer(client) >= NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].FloatValue)
+			{
+				SetSpecialSpawnClient(client);
+			}
+		}
+	}
+
+	if (NCvar[CSpecial_Check_IsPlayerNotInCombat].BoolValue)
+	{
+		for (int i = 0; i <= MaxClients; i++)
+		{
+			if (IsValidClient(i) && IsPlayerAlive(i) && !IsClientInCombat(i))
+			{
+				SetSpecialSpawnClient(i);
+			}
+		}
+	}
 
 	return Plugin_Continue;
 }
@@ -136,7 +171,7 @@ public Action OnPlayerSpawn(Event hEvent, const char[] sName, bool bDontBroadcas
 
 public Action OnTankSpawn(Event event, const char[] name, bool dontBroadcast)
 {
-	if(NCvar[CSpecial_PluginStatus].BoolValue)
+	if (NCvar[CSpecial_PluginStatus].BoolValue)
 		SetSpecialRunning(NCvar[CSpecial_Spawn_Tank_Alive].BoolValue);
 	else
 		SetSpecialRunning(false);

@@ -73,8 +73,6 @@ GlobalState Neko_GlobalState;
 
 bool		TankAlive, HudRunning, IsMapTransition;
 
-char   		HudStyleName[5][50] = { "关闭中", "样式1", "样式2", "自定义", "聊天栏" };
-
 int			StyleChatDelay;
 
 char		CorePath[PLATFORM_MAX_PATH];

@@ -48,6 +48,49 @@ static float  MapStartTime;
 
 #define NEKOTAG						   "[NS]"
 
+stock char SpecialName[8][50]	 = { "NULL", "牛子", "胖子", "口水", "舌头", "猴子", "猎人", "默认" };
+
+stock char SpawnModeName[5][50]	 = { "导演", "普通", "噩梦", "地狱", "可变" };
+
+stock char GameDifficulty[4][50] = { "简单", "普通", "困难", "专家" };
+
+stock char HudStyleName[5][50]	 = { "关闭中", "样式1", "样式2", "自定义", "聊天栏" };
+
+// Core.Inc
+
+stock void CreateConfigFire(char[] CorePath)
+{
+	Handle WriteConfig = OpenFile(CorePath, "w");
+	if (WriteConfig == INVALID_HANDLE)
+		SetFailState("%s 自定义配置文件创建失败: %s", NEKOTAG, CorePath);
+
+	WriteFileLine(WriteConfig, "\"Settings\"");
+	WriteFileLine(WriteConfig, "{");
+	WriteFileLine(WriteConfig, "	\"KillHud_KillTankTitle\"			\"本次对Tank伤害\"");
+	WriteFileLine(WriteConfig, "	\"KillHud_KillSpecialsTitle\"		\"击杀排行\"");
+	WriteFileLine(WriteConfig, "	\"KillHud_FriendlyFireTitle\"		\"黑枪排行\"");
+	WriteFileLine(WriteConfig, "	\"ServerNameFormat\"			\"XX多特{servernum}服[{specials}特{times}秒][重启:{restartcount}|路程:{flow}]{maptime}\"");
+	WriteFileLine(WriteConfig, "}");
+
+	WriteFileLine(WriteConfig, "//以下为自定义服务器名字能加入的参数，根据个人选择加入");
+	WriteFileLine(WriteConfig, "//{servernum} 			服务器数字 服务器端口后缀 27015 的 15 就是你的服务器数字");
+	WriteFileLine(WriteConfig, "//{specials} 			目前多特数量，需要搭配Neko多特插件");
+	WriteFileLine(WriteConfig, "//{times} 				目前多特刷新时间，需要搭配Neko多特插件");
+	WriteFileLine(WriteConfig, "//{spawnmode} 			目前多特刷特模式，需要搭配Neko多特插件");
+	WriteFileLine(WriteConfig, "//{specialsmode} 		目前多特特感模式，需要搭配Neko多特插件");
+	WriteFileLine(WriteConfig, "//{gamedifficulty} 		游戏难度");
+	WriteFileLine(WriteConfig, "//{restartcount} 		失败重启次数");
+	WriteFileLine(WriteConfig, "//{flow} 				当前玩家的路程");
+	WriteFileLine(WriteConfig, "//{maptime}				目前地图时间，自带格式，例如[计时:2m:10s]");
+	WriteFileLine(WriteConfig, "//{realplayernum}		服务器在线真人人数，不包括特感");
+	WriteFileLine(WriteConfig, "//{playernum}			服务器在线人数含BOT，不包括特感");
+	WriteFileLine(WriteConfig, "//{realaliveplayernum}	服务器在线且存活真人人数，不包括特感");
+	WriteFileLine(WriteConfig, "//{aliveplayernum}		服务器存活真人人数，不包括特感");
+	WriteFileLine(WriteConfig, "//{customtext}			ServerName_CustomText这个Convar的内容");
+
+	delete WriteConfig;
+}
+
 // Time.Inc
 
 /**
@@ -155,6 +198,27 @@ stock char[] GetNowTime_Seconds()
 }
 
 // MainLib.Inc
+/**
+ * Returns Difficulty number.
+ *
+ * @return				0-3.
+ */
+stock int GameDifficultyNum()
+{
+	char NowDifficulty[64];
+	FindConVar("z_difficulty").GetString(NowDifficulty, sizeof(NowDifficulty));
+
+	if (strcmp(NowDifficulty, "Easy") == 0)
+		return 0;
+	else if (strcmp(NowDifficulty, "Normal") == 0)
+		return 1;
+	else if (strcmp(NowDifficulty, "Hard") == 0)
+		return 2;
+	else if (strcmp(NowDifficulty, "Impossible") == 0)
+		return 3;
+
+	return 0;
+}
 
 /**
  * Returns if a certain Client is Vaild.
@@ -318,6 +382,25 @@ stock bool IsPlayerTank(int client)
 }
 
 /**
+ * Returns if >2 specials is alive.
+ *
+ * @return				True if >2 specials is alive, false otherwise.
+ */
+stock bool IsMoreSpecialsAlive()
+{
+	int num = 0;
+	for (int i = 0; i <= MaxClients; i++)
+	{
+		if (!IsValidClient(i) || !IsPlayerAlive(i) || GetClientTeam(i) != 3 || IsPlayerTank(i))
+			continue;
+		num++;
+	}
+	if (num > 2)
+		return true;
+	return false;
+}
+
+/**
  * Returns if any tank is alive.
  *
  * @return				True if any tank is alive, false otherwise.
@@ -385,8 +468,59 @@ stock int GetPlayers(bool connecting)
 	int players;
 	for (int i = 1; i <= MaxClients; i++)
 	{
-		if (connecting && IsClientConnected(i) && !IsClientInGame(i)) players++;
-		else if (!connecting && IsValidClient(i)) players++;
+		if (connecting && IsClientConnected(i) && !IsClientInGame(i) && GetClientTeam(i) == 2) players++;
+		else if (!connecting && IsValidClient(i) && GetClientTeam(i) == 2) players++;
+	}
+	return players;
+}
+
+/**
+ * Returns Real Player Num.
+ *
+ * @param connecting	bool Count the number of connecting people.
+ * @return				Players Num.
+ */
+stock int GetRealPlayers(bool connecting)
+{
+	int players;
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (connecting && IsClientConnected(i) && !IsClientInGame(i) && !IsFakeClient(i) && GetClientTeam(i) == 2) players++;
+		else if (!connecting && IsValidClient(i) && !IsFakeClient(i) && GetClientTeam(i) == 2) players++;
+	}
+	return players;
+}
+
+/**
+ * Returns Alive Player Num.
+ *
+ * @param connecting	bool Count the number of connecting people.
+ * @return				Players Num.
+ */
+stock int GetAlivePlayers(bool connecting)
+{
+	int players;
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (connecting && IsClientConnected(i) && !IsClientInGame(i) && IsPlayerAlive(i) && GetClientTeam(i) == 2) players++;
+		else if (!connecting && IsValidClient(i) && IsPlayerAlive(i) && GetClientTeam(i) == 2) players++;
+	}
+	return players;
+}
+
+/**
+ * Returns Real&Alive Player Num.
+ *
+ * @param connecting	bool Count the number of connecting people.
+ * @return				Players Num.
+ */
+stock int GetRealAlivePlayers(bool connecting)
+{
+	int players;
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (connecting && IsClientConnected(i) && !IsClientInGame(i) && !IsFakeClient(i) && IsPlayerAlive(i) && GetClientTeam(i) == 2) players++;
+		else if (!connecting && IsValidClient(i) && !IsFakeClient(i) && IsPlayerAlive(i) && GetClientTeam(i) == 2) players++;
 	}
 	return players;
 }

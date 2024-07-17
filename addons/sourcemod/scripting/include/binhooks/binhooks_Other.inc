@@ -3,14 +3,14 @@ enum SurvivorSet
 	DEf = -3,
 	DESC,
 	RANDOM,
-	NICK,     
-	ROCHELLE,       
-	COACH,        
-	ELLIS,     
-	BILL,       
-	ZOEY,        
-	FRANCIS,     
-	LOUIS,               
+	NICK,
+	ROCHELLE,
+	COACH,
+	ELLIS,
+	BILL,
+	ZOEY,
+	FRANCIS,
+	LOUIS,
 };
 
 /**
@@ -20,7 +20,7 @@ enum SurvivorSet
  * @return	 		SurvivorBot index;
  * @error			map no running(-1).
  */
-native int CreateSurvivorBot(SurvivorSet survivor,bool istatic = false);
+native int	CreateSurvivorBot(SurvivorSet survivor, bool istatic = false);
 
 /**
  * Get All Infected Ladder Count.
@@ -29,7 +29,7 @@ native int CreateSurvivorBot(SurvivorSet survivor,bool istatic = false);
  * @return	 		Ladders Max Count,-1 error;
  * @error			map no running(-1).
  */
-native int GetAllInfectedLadderCount();
+native int	GetAllInfectedLadderCount();
 
 /**
  * Get All Infected Ladder pos.
@@ -39,13 +39,13 @@ native int GetAllInfectedLadderCount();
  * @vec	 		    from 0 to GetAllInfectedLadderCount();
  * @error			map no running(-1).
  */
-native bool GetInfectedLadderPos(int serial,float vec[3]);
+native bool GetInfectedLadderPos(int serial, float vec[3]);
 
 /**
  * control Bot to attack target.
  *
  *
- * @no return	 
+ * @no return
  * @error			invalid bot or invalid target.
  */
 native void SetFakeClientAimTarget(int bot, int target);
@@ -54,7 +54,7 @@ native void SetFakeClientAimTarget(int bot, int target);
  * cancel Bot to attack target.
  *
  *
- * @no return	 
+ * @no return
  * @error			invalid bot.
  */
 native void ResetFakeClient(int bot);
@@ -63,7 +63,7 @@ native void ResetFakeClient(int bot);
  * By Defib Revive Client.(通过电击效果复活，但必须有尸体才能复活，有电击特效)
  *
  *
- * @no return	 
+ * @no return
  * @error			invalid Client.
  */
 native void ReviveClientByDefib(int client);
@@ -72,7 +72,7 @@ native void ReviveClientByDefib(int client);
  * Respawn Client.(任何时候皆可以复活，无尸体都可以，这是无签名版本，不会随着服务器更新而导致崩服)
  *
  *
- * @no return	 
+ * @no return
  * @error			invalid Client.
  */
 native void RespawnClient(int client);
@@ -81,7 +81,7 @@ native void RespawnClient(int client);
  * From Incap Revive Client.
  *
  *
- * @no return	 
+ * @no return
  * @error			invalid Client.
  */
 native void ReviveClientFromIncap(int client);
@@ -93,7 +93,7 @@ native void ReviveClientFromIncap(int client);
  * @return	 		if Has Visible Threats for true,false otherwise;
  * @error			invalid cleint.
  */
-stock bool IsClientHasVisibleThreats(int client)
+stock bool	IsClientHasVisibleThreats(int client)
 {
 	return HasEntProp(client, Prop_Send, "m_hasVisibleThreats") && !!GetEntProp(client, Prop_Send, "m_hasVisibleThreats");
 }
@@ -105,17 +105,17 @@ stock bool IsClientHasVisibleThreats(int client)
  * @return	 		if Has Any Client Recently Be Hurt for true,false otherwise;
  * @error			no error.
  */
-native bool HasAnyClientRecentlyBeHurt();
+#pragma deprecated invaild.
+native bool		   HasAnyClientRecentlyBeHurt();
 
 /**
- * whether Has Client Recently Be Hurt.
+ * whether Client currently in combat.
  *
  *
  * @return	 		if Has Any Client Recently Be Hurt for true,false otherwise;
  * @error			no error.
  */
-native bool HasClientRecentlyBeHurt(int client);
-
+native bool		   IsClientInCombat(int client);
 
 /**
  * whether Client Has Mess Around.
@@ -124,9 +124,9 @@ native bool HasClientRecentlyBeHurt(int client);
  * @return	 		if Has Mess Around for true,false otherwise;
  * @error			no error.
  */
-stock bool IsClientHasMessAround(int client)
+stock bool		   IsClientHasMessAround(int client)
 {
-	return !IsClientHasVisibleThreats(client) && !HasClientRecentlyBeHurt(client);
+	return !IsClientHasVisibleThreats(client);
 }
 
 /**
@@ -136,25 +136,8 @@ stock bool IsClientHasMessAround(int client)
  * @return	 		if Has Any Survivor Left Safe Area for true,false otherwise;
  * @error			no error.
  */
-native bool HasAnySurvivorLeftSafeArea();
-
-/**
- * whether Has Any Survivor In Exit Checkpoint.
- *
- *
- * @return	 		if Any Survivor In Exit Checkpoint for true,false otherwise;
- * @error			no error.
- */
-native bool IsAnySurvivorInExitCheckpoint();
-
-/**
- * whether Has Any Survivor In Start Area.
- *
- *
- * @return	 		if Any Survivor In Start Area for true,false otherwise;
- * @error			no error.
- */
-native bool IsAnySurvivorInStartArea();
+#pragma deprecated invaild.
+native bool		   HasAnySurvivorLeftSafeArea();
 
 /**
  * whether Client Be Held.
@@ -163,12 +146,12 @@ native bool IsAnySurvivorInStartArea();
  * @return	 		if Client Be Held for true,false otherwise;
  * @error			no error.
  */
-stock bool IsClientHeld(int client)
+stock bool		   IsClientHeld(int client)
 {
-	int jockey = GetEntPropEnt(client, Prop_Send, "m_jockeyAttacker");
+	int jockey	= GetEntPropEnt(client, Prop_Send, "m_jockeyAttacker");
 	int charger = GetEntPropEnt(client, Prop_Send, "m_pummelAttacker");
-	int hunter = GetEntPropEnt(client, Prop_Send, "m_pounceAttacker");
-	int smoker = GetEntPropEnt(client, Prop_Send, "m_tongueOwner");
+	int hunter	= GetEntPropEnt(client, Prop_Send, "m_pounceAttacker");
+	int smoker	= GetEntPropEnt(client, Prop_Send, "m_tongueOwner");
 	if (jockey > 0 || charger > 0 || hunter > 0 || smoker > 0)
 	{
 		return true;
@@ -183,142 +166,152 @@ stock bool IsClientHeld(int client)
  * @return	 		if Entity Be Biled for true,false otherwise;
  * @error			invalid entity.
  */
- 
+
 stock bool IsEntityBiled(int entity)
 {
 	float specialisbiled = GetEntPropFloat(entity, Prop_Send, "m_vomitFadeStart");
 	if (specialisbiled != 0.0 && specialisbiled - GetGameTime() <= 5.0 && specialisbiled >= GetGameTime())
 	{
-		 return true;
+		return true;
 	}
-    return false;
-} 
+	return false;
+}
 
 /**
- * Returns true if the current mode supports player controlled zombies.
+ * Get the distance between the lead and trailing survivors.
  *
  *
- * @return	 		if mode supports for true,false otherwise;
- * @error			no error.
+ * @return	 		distance;
+ * @error			invalid cleint.
  */
- 
-native bool HasPlayerControlledZombies();
+native float	   GetAveragedSurvivorDistance();
 
 /**
- * Get Time Since Special Killed.
- *
- *
- * @return	 		Time value;
- * @error			invalid zombieType.
- */
-native bool GetTimeSinceSpecialKilled(int zombieType);
-
-/**
- * Get Client Alive Duration.
- *
- *
- * @return	 		Duration value;
- * @error			invalid client.
- */
-native bool GetClientAliveDuration(int client);
-
-/**
- * Get Averaged Survivor Speed.
+ * Get Averaged Survivor Speed along the flow.
  *
  *
  * @return	 		Survivor Speed;
  * @error			invalid cleint.
  */
-native float GetAveragedSurvivorSpeed(int client);
+native float	   GetAveragedSurvivorSpeed();
 
 /**
- * Get the distance between the lead and trailing survivors;
+ * Get the Survivor with the highest flow.
  *
  *
  * @return	 		Survivor distance;
  * @error			invalid cleint.
  */
-native float GetAveragedSurvivorDis(int client);
-
+native int		   GetHighestFlowSurvivor();
 
 /**
- * Get the navigation flow distance from the start to the survivors position averaged.
+ * Get the Survivor with the lowest flow.
+ *
+ *
+ * @return	 		Survivor distance;
+ * @error			invalid cleint.
+ */
+native int		   GetLowestFlowSurvivor();
+
+/**
+ * Get the distance along the flow that the Furthest survivors have reached.
+ *
+ *
+ * @return	 		Survivor distance;
+ * @error			invalid cleint.
+ */
+native float	   GetFurthestSurvivorFlow();
+
+/**
+ * Get the navigation flow distance from the start to the end of the level.
  *
  *
  * @return	 		distance;
  * @error			invalid cleint.
  */
-native float GetAverageSurvivorFlowDis(int client);
+native float	   GetMaxFlowDistance();
 
 /**
- * Returns the navigation flow distance from the start to the end of the level.
+ * Get the navigation flow distance from the start to the Average survivors position.
  *
  *
  * @return	 		distance;
  * @error			invalid cleint.
  */
-native float GetMaxFlowDistance();
+native float	   GetAverageSurvivorFlowDistance();
 
 /**
- * @brief Starts the versus round, even if the survivors haven't left the safe room.
- * 
- * @error				invalid round.
- * @noreturn			
+ * Get the navigation flow distance from the start to the specified player.
+ *
+ *
+ * @return	 		distance;
+ * @error			invalid cleint.
  */
-native void ForceVersusStart();
+native float	   GetCurrentFlowDistanceForPlayer(int client);
 
 /**
- * @brief Starts the survival round, even if the survivors haven't activated the radio.
- * 
- * @error				invalid round.
- * @noreturn			
+ * Get how far in the Percent navigation flow from the start to the end the player is.
+ *
+ *
+ * @return	 		distance;
+ * @error			invalid cleint.
  */
-native void ForceSurvivalStart();
+native float	   GetCurrentFlowPercentForPlayer(int client);
 
 /**
- * @brief 	Starts the scavenge round, even if the setup timer hasn't elapsed.
- * 
- * @error				invalid round.
- * @noreturn			
+ * Get the navigation flow distance from the start to the specified point.
+ *
+ *
+ * @return	 		distance;
+ * @error			invalid cleint.
  */
-native void ForceScavengeStart();
+native float	   GetFlowDistanceForPosition(float pos[3]);
+
+/**
+ * Get how far in the Percent navigation flow from the start to the end the position is.
+ *
+ *
+ * @return	 		distance;
+ * @error			invalid cleint.
+ */
+native float	   GetFlowPercentForPosition(float pos[3]);
 
 /**
  * @brief Removes lobby reservation from a server
  * @remarks Sets the reservation cookie to 0,
  *			it is safe to call this even if it's unreserved.
  */
-native void BinHook_LobbyUnreserve();
+native void		   BinHook_LobbyUnreserve();
 
 /**
  * @brief Returns whether or not a map is currently running.
  *
  * @return			True if a map is currently running, otherwise false.
  */
-native bool IsMapRunning();
+native bool		   IsMapRunning();
 
 /**
  * @brief Returns whether or not a map is currently Intro.
  *
  * @return			True if a map is currently Intro, otherwise false.
  */
-native bool IsMapInIntro();
+native bool		   IsMapInIntro();
 
 /**
  * @brief pushing an entity in the given direction.
- * 
+ *
  * @error				invalid entity.
- * @noreturn			
+ * @noreturn
  */
-native void PushEntity(int entity, float vec[3]);
+native void		   PushEntity(int entity, float vec[3]);
 
 /**
  * @brief Spining an entity in the given direction.
- * 
+ *
  * @error				invalid entity.
- * @noreturn			
+ * @noreturn
  */
-native void SpinEntity(int entity, float vec[3]);
+native void		   SpinEntity(int entity, float vec[3]);
 
 /**
  * Adds two Bign int or float string together.
@@ -331,7 +324,7 @@ native void SpinEntity(int entity, float vec[3]);
  * @param maxlength    Maximum length of strResult buffer.
  * @return             if value>0 return 1;if value==0 return 0;if value<0 return -1.
  */
-native int BignAdd(const char[] str1, const char[] str2, char[] strResult, int maxlength);
+native int		   BignAdd(const char[] str1, const char[] str2, char[] strResult, int maxlength);
 
 /**
  * Subtracts str2 from str1(int or float string).
@@ -344,7 +337,7 @@ native int BignAdd(const char[] str1, const char[] str2, char[] strResult, int m
  * @param maxlength    Maximum length of strResult buffer.
  * @return             if value>0 return 1;if value==0 return 0;if value<0 return -1.
  */
-native int BignSub(const char[] str1, const char[] str2, char[] strResult, int maxlength);
+native int		   BignSub(const char[] str1, const char[] str2, char[] strResult, int maxlength);
 
 /**
  * Called when the player or client  was stucked.
@@ -353,7 +346,7 @@ native int BignSub(const char[] str1, const char[] str2, char[] strResult, int m
  * @return  Plugin_Continue or Plugin_Handled.
  * @error			invalid client or player isn't alive.
  */
-forward Action OnPlayerStuck(int client);
+forward Action	   OnPlayerStuck(int client);
 
 /**
  * Called when the player or client manual freedom speaking.(检测玩家是否用了自由麦，hook检测，效率高)
@@ -363,4 +356,4 @@ forward Action OnPlayerStuck(int client);
  * @error			invalid client.
  */
 #pragma deprecated invaild.
-forward Action OnPlayerVoice(int client);
+forward Action	   OnPlayerVoice(int client);

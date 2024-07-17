@@ -1,10 +1,11 @@
 
+
 public Action Timer_SpawnFakeClient(Handle hTimer)
 {
 	int client = CreateFakeClient("NEKOBOT");
-	if(client > 0)
+	if (client > 0)
 	{
-		ChangeClientTeam(client, 3)
+		ChangeClientTeam(client, 3);
 		KickClient(client);
 	}
 	return Plugin_Stop;
@@ -12,9 +13,8 @@ public Action Timer_SpawnFakeClient(Handle hTimer)
 
 public Action Timer_DelaySpawnInfected(Handle hTimer)
 {
-	SetSpecialRunning(NCvar[CSpecial_PluginStatus].BoolValue);
-	
 	Call_StartForward(N_Forward_OnStartFirstSpawn);
+	SetSpecialRunning(NCvar[CSpecial_PluginStatus].BoolValue);
 	Call_Finish();
 
 	return Plugin_Stop;
@@ -22,7 +22,7 @@ public Action Timer_DelaySpawnInfected(Handle hTimer)
 
 public Action PlayerLeftStart(Handle Timer)
 {
-	if(L4D_HasAnySurvivorLeftSafeArea())
+	if (L4D_HasAnySurvivorLeftSafeArea())
 	{
 		IsPlayerLeftCP = true;
 		CreateTimer(NCvar[CSpecial_LeftPoint_SpawnTime].FloatValue, Timer_DelaySpawnInfected);
@@ -32,7 +32,7 @@ public Action PlayerLeftStart(Handle Timer)
 	return Plugin_Continue;
 }
 
-public Action Timer_ReloadMenu(Handle timer, any client) 
+public Action Timer_ReloadMenu(Handle timer, any client)
 {
 	client = GetClientOfUserId(client);
 	if (IsValidClient(client))
@@ -43,31 +43,31 @@ public Action Timer_ReloadMenu(Handle timer, any client)
 	return Plugin_Continue;
 }
 
-public Action Timer_SetMaxSpecialsCount(Handle timer) 
+public Action Timer_SetMaxSpecialsCount(Handle timer)
 {
 	SetMaxSpecialsCount();
 	return Plugin_Stop;
 }
 
-public Action ShowTipsTimer(Handle timer) 
+public Action ShowTipsTimer(Handle timer)
 {
 	InfectedTips();
 	return Plugin_Stop;
 }
 
-public void Timer_KickBot(any client) 
+public void Timer_KickBot(any client)
 {
 	client = GetClientOfUserId(client);
 	if (IsValidClient(client) && IsFakeClient(client) && !IsClientInKickQueue(client))
 	{
-		if(GetEntProp(client, Prop_Send, "m_zombieClass") != 4)
+		if (GetEntProp(client, Prop_Send, "m_zombieClass") != 4)
 			KickClient(client);
 		else
 			CreateTimer(10.0, Timer_DelaySpitterDeath, GetClientUserId(client));
 	}
 }
 
-public Action Timer_DelaySpitterDeath(Handle timer, any client) 
+public Action Timer_DelaySpitterDeath(Handle timer, any client)
 {
 	client = GetClientOfUserId(client);
 	if (IsValidClient(client) && IsFakeClient(client) && !IsClientInKickQueue(client))
@@ -78,7 +78,7 @@ public Action Timer_DelaySpitterDeath(Handle timer, any client)
 
 public Action KillHUDShow(Handle timer)
 {
-	if(HUDSlotIsUsed(HUD_MID_TOP))
+	if (HUDSlotIsUsed(HUD_MID_TOP))
 		RemoveHUD(HUD_MID_TOP);
 	return Plugin_Stop;
 }

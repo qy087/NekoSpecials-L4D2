@@ -87,8 +87,4 @@ char   VoteMenuItems[MAXPLAYERS + 1][512], WaitForVoteItems[MAXPLAYERS + 1][512]
 
 bool   BoolWaitForVoteItems[MAXPLAYERS + 1];
 
-char   SpecialName[8][50]	= { "NULL", "牛子", "胖子", "口水", "舌头", "猴子", "猎人", "默认" };
-
-char   SpawnModeName[4][50] = { "引擎", "普通", "噩梦", "地狱" };
-
 Menu   N_MenuVoteMenu[MAXPLAYERS + 1], N_MenuAdminMenu[MAXPLAYERS + 1];

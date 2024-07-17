@@ -1,3 +1,5 @@
+
+
 public Menu NekoVoteMenu(int client)
 {
 	if (!IsValidClient(client))

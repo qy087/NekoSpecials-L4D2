@@ -22,7 +22,6 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	AutoExecConfig_SetFile(PLUGIN_CONFIG);
-	AutoExecConfig_SetCreateFile(true);	   //不需要生成文件请改为false
 
 	NCvar[CSpecial_PluginStatus]					  = AutoExecConfig_CreateConVar("Special_PluginStatus", "1", "[0=关|1=开]禁用/启用刷特[禁用后插件将不会刷出特感，若Special_CanCloseDirector为打开状态，将会一只特感都不会刷出]", _, true, 0.0, true, 1.0);
 	NCvar[CSpecial_Fast_Response]					  = AutoExecConfig_CreateConVar("Special_Fast_Response", "1", "[0=关|1=开]禁用/启用更快的特殊感染反应[建议开着就好]", _, true, 0.0, true, 1.0);
@@ -44,6 +43,7 @@ public void OnPluginStart()
 	NCvar[CSpecial_Num_NotCul_Death]				  = AutoExecConfig_CreateConVar("Special_Num_NotCul_Death", "0", "[0=关|1=开]计算玩家人数时，不把死亡玩家也算进去[这个不会把死亡玩家也算进去，非常不建议打开!]", _, true, 0.0, true, 1.0);
 
 	NCvar[CSpecial_Random_Mode]						  = AutoExecConfig_CreateConVar("Special_Random_Mode", "0", "[0=关|1=开]启用随机特感[开启后会随机Special_Default_Mode中包含的模式，仅供娱乐]", _, true, 0.0, true, 1.0);
+	NCvar[CSpecial_SpawnWay]						  = AutoExecConfig_CreateConVar("Special_SpawnWay", "0", "[0=一起刷新|1=死后补充]特感刷新方式", _, true, 0.0, true, 1.0);
 	NCvar[CSpecial_Default_Mode]					  = AutoExecConfig_CreateConVar("Special_Default_Mode", "7", "指定刷新模式(当随机特感关闭生效)[1=全牛子|2=全胖子|3=全口水|4=全舌头|5=全猴子|6=全猎人|7=默认][默认模式为全部特感类型都会刷新，其他为单一类型刷新]", _, true, 1.0, true, 8.0);
 	NCvar[CSpecial_Spawn_Mode]						  = AutoExecConfig_CreateConVar("Special_Spawn_Mode", "1", "[0=导演|1=普通|2=噩梦|3=地狱|4=可变]特感生成方式[导演就是游戏自带的导演系统，普通是插件默认选项比较适合普通玩家，噩梦与地狱适合大佬游玩，地狱是最高难度，噩梦与地狱刷特位置会比较近]", _, true, 0.0, true, 4.0);
 	NCvar[CSpecial_IsModeInNormal]					  = AutoExecConfig_CreateConVar("Special_IsModeInNormal", "1", "[1=模式1(默认)|2=模式2]在Special_Spawn_Mode的普通、噩梦、地狱模式下有效的子模式,只有1和2可选，具体说明请看插件的说明书。", _, true, 1.0, true, 2.0);
@@ -109,8 +109,11 @@ public void OnPluginStart()
 
 	NCvar[CSpecial_Check_IsPlayerNotInCombat]		  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerNotInCombat", "0", "[0=关|1=开]禁用/启用在摸鱼的玩家身边刷特[仅供测试]", _, true, 0.0, true, 1.0);
 
-	NCvar[CSpecial_CheckGame_Time]					  = AutoExecConfig_CreateConVar("Special_CheckGame_Time", "2.5", "检查玩家是否被喷一脸的间隔，单位秒[0.1s-5.0s]", _, true, 0.1, true, 5.0);
 	NCvar[CSpecial_Check_IsPlayerBiled]				  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerBiled", "0", "[0=关|1=开]禁用/启用让某些特感注重攻击被胖子喷一脸的玩家", _, true, 0.0, true, 1.0);
+	NCvar[CSpecial_Check_IsPlayerBiled_Time]		  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerBiled_Time", "2.5", "检查玩家是否被喷一脸的间隔，单位秒，基于OnPlayerRunCmd，间隔越低性能有所消耗，不需要的可以不开该功能[0.1s-2.0s]", _, true, 0.1, true, 2.0);
+
+	NCvar[CSpecial_Attack_PlayerNotInCombat]		  = AutoExecConfig_CreateConVar("Special_Attack_PlayerNotInCombat", "0", "[0=关|1=开]禁用/启用特感主动攻击摸鱼玩家[仅供测试]", _, true, 0.0, true, 1.0);
+	NCvar[CSpecial_Attack_PlayerNotInCombat_Time]	  = AutoExecConfig_CreateConVar("Special_Attack_PlayerNotInCombat_Time", "6", "检查玩家是否一直处于摸鱼状态，达到指定秒数，将让其中一只特感目标设置为该玩家，Special_Attack_PlayerNotInCombat启用后才生效[3-15秒]", _, true, 3.0, true, 15.0);
 
 	NCvar[CGame_Difficulty]							  = FindConVar("z_difficulty");
 
@@ -154,8 +157,6 @@ public void OnPluginStart()
 
 public void OnConfigsExecuted()
 {
-	CheckGameTime = 0.0;
-	
 	SetAISpawnInit();
 	TgModeStartSet();
 	UpdateSpawnWeight();
@@ -165,6 +166,9 @@ public void OnConfigsExecuted()
 
 	for (int i = 1; i <= MaxClients; i++)
 	{
+		CheckBiledTime[i] = 0.0;
+		CheckFreeTime[i]  = 0.0;
+		CheckNotCombat[i] = 0;
 		N_ClientItem[i].Reset();
 		N_ClientMenu[i].Reset(true);
 	}

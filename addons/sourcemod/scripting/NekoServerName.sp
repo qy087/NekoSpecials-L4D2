@@ -71,7 +71,6 @@ public any NekoServerName_REChangeCustomTest(Handle plugin, int numParams)
 public void OnPluginStart()
 {
 	AutoExecConfig_SetFile(PLUGIN_CONFIG);
-	AutoExecConfig_SetCreateFile(true);	   //不需要生成文件请改为false
 
 	NCvar[CServerName_AutoUpdate]	   = AutoExecConfig_CreateConVar("ServerName_AutoUpdate", "1", "[0=关|1=开]禁用/启用自动更新服务器名字功能[显示路程需要打开]", _, true, 0.0, true, 1.0);
 	NCvar[CServerName_UpdateTime]	   = AutoExecConfig_CreateConVar("ServerName_UpdateTime", "15", "服务器名字自动更新延迟", _, true, 1.0, true, 120.0);
@@ -188,11 +187,11 @@ void SetServerName()
 	{
 		if (!StrEqual(ServerPort[3], "0"))
 		{
-			Format(tmp, sizeof(tmp), "%d%d", ServerPort[3], ServerPort[4]);
+			Format(tmp, sizeof(tmp), "%s%s", ServerPort[3], ServerPort[4]);
 		}
 		else
 		{
-			Format(tmp, sizeof(tmp), "%d", ServerPort[4]);
+			Format(tmp, sizeof(tmp), "%s", ServerPort[4]);
 		}
 		ReplaceString(ServerName, sizeof(ServerName), "{servernum}", tmp, false);
 	}

@@ -262,17 +262,30 @@ public Action ChatListener(int client, const char[] command, int args)
 				PrintToChat(client, "\x05%s \x04掉队玩家与队伍之间相隔最大距离设置为 \x03%0.f", NEKOTAG, GetCmdArgFloat(0));
 			}
 		}
-		else if (N_ClientItem[client].WaitingForTgCheckTime)
+		else if (N_ClientItem[client].WaitingForTgCheckBliedTime)
 		{
-			if (GetCmdArgFloat(0) < 0.1 || GetCmdArgFloat(0) > 5.0)
+			if (GetCmdArgFloat(0) < 0.1 || GetCmdArgFloat(0) > 2.0)
 			{
-				PrintToChat(client, "\x05%s \x04输入的数值有误，请重试 \x03范围[0.1 至 5.0]", NEKOTAG);
+				PrintToChat(client, "\x05%s \x04输入的数值有误，请重试 \x03范围[0.1 至 2.0]", NEKOTAG);
 				return Plugin_Continue;
 			}
 			else
 			{
-				NCvar[CSpecial_CheckGame_Time].SetFloat(GetCmdArgFloat(0));
+				NCvar[CSpecial_Check_IsPlayerBiled_Time].SetFloat(GetCmdArgFloat(0));
 				PrintToChat(client, "\x05%s \x04检查间隔设置为 \x03%0.f", NEKOTAG, GetCmdArgFloat(0));
+			}
+		}
+		else if (N_ClientItem[client].WaitingForTgCheckNotInCombat)
+		{
+			if (GetCmdArgInt(0) < 3 || GetCmdArgInt(0) > 15)
+			{
+				PrintToChat(client, "\x05%s \x04输入的数值有误，请重试 \x03范围[3 至 15]", NEKOTAG);
+				return Plugin_Continue;
+			}
+			else
+			{
+				NCvar[CSpecial_Spawn_MinDis].SetInt(GetCmdArgInt(0));
+				PrintToChat(client, "\x05%s \x04摸鱼最大秒数设置为 \x03%d", NEKOTAG, GetCmdArgInt(0));
 			}
 		}
 

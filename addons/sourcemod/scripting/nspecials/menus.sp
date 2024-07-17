@@ -44,6 +44,9 @@ public Menu SpecialMenu(int client)
 		Format(line, sizeof(line), "特感快速反应 [%s]", !GetSpecialAssault() ? "关" : "开");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfast", line);
 
+		Format(line, sizeof(line), "特感刷新方式 [%s]", !GetSpecialSpawnWay() ? "一起刷新" : "死亡补充");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgspawnway", line);
+
 		Format(line, sizeof(line), "随机特感模式 [%s]", !NCvar[CSpecial_Random_Mode].BoolValue ? "关" : "开");
 		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgrandom", line);
 
@@ -130,7 +133,7 @@ public Menu SpecialMenu(int client)
 		if (NCvar[CSpecial_Catch_FastPlayer].BoolValue)
 		{
 			Format(line, sizeof(line), "最快玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_FastPlayer_CheckDistance].FloatValue);
-			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfastplayerdis", line);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfastpdis", line);
 		}
 
 		Format(line, sizeof(line), "防玩家掉队机制 [%s]", NCvar[CSpecial_Catch_SlowestPlayer].BoolValue ? "是" : "否");
@@ -139,7 +142,7 @@ public Menu SpecialMenu(int client)
 		if (NCvar[CSpecial_Catch_SlowestPlayer].BoolValue)
 		{
 			Format(line, sizeof(line), "掉队玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].FloatValue);
-			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgslowplayerdis", line);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgslowpdis", line);
 		}
 
 		Format(line, sizeof(line), "摸鱼玩家身边刷特 [%s]", NCvar[CSpecial_Check_IsPlayerNotInCombat].BoolValue ? "是" : "否");
@@ -150,8 +153,17 @@ public Menu SpecialMenu(int client)
 
 		if (NCvar[CSpecial_Check_IsPlayerBiled].BoolValue)
 		{
-			Format(line, sizeof(line), "检测被喷胆汁玩家的间隔 [%0.fs]", NCvar[CSpecial_CheckGame_Time].FloatValue);
-			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgchecktime", line);
+			Format(line, sizeof(line), "检测被喷胆汁玩家的间隔 [%0.fs]", NCvar[CSpecial_Check_IsPlayerBiled_Time].FloatValue);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgbiledchecktime", line);
+		}
+
+		Format(line, sizeof(line), "攻击摸鱼玩家 [%s]", NCvar[CSpecial_Attack_PlayerNotInCombat].BoolValue ? "是" : "否");
+		N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgattackidleplayer", line);
+
+		if (NCvar[CSpecial_Attack_PlayerNotInCombat].BoolValue)
+		{
+			Format(line, sizeof(line), "摸鱼最大秒数 [%ds]", NCvar[CSpecial_Attack_PlayerNotInCombat_Time].IntValue);
+			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgattackidletime", line);
 		}
 
 		Format(line, sizeof(line), "显示插件提示 [%s]", NCvar[CSpecial_Show_Tips].BoolValue ? "是" : "否");
@@ -188,7 +200,7 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 				N_ClientItem[client].Reset();
 				N_ClientMenu[client].MenuPageItem = GetMenuSelectionPosition();
 
-				char items[50];
+				char items[80];
 				menu.GetItem(selection, items, sizeof(items));
 
 				bool NeedOpenMenu = true;
@@ -289,6 +301,8 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 					AutoExecConfig_OnceExec();
 					SetMaxSpecialsCount();
 				}
+				if (StrEqual(items, "tgspawnway"))
+					NCvar[CSpecial_SpawnWay].SetBool(!NCvar[CSpecial_SpawnWay].BoolValue);
 				if (StrEqual(items, "tgfast"))
 					NCvar[CSpecial_Fast_Response].SetBool(!NCvar[CSpecial_Fast_Response].BoolValue);
 				if (StrEqual(items, "tgpcspec"))
@@ -313,13 +327,13 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 					NCvar[CSpecial_Catch_FastPlayer].SetBool(!NCvar[CSpecial_Catch_FastPlayer].BoolValue);
 				if (StrEqual(items, "tgslowplayer"))
 					NCvar[CSpecial_Catch_SlowestPlayer].SetBool(!NCvar[CSpecial_Catch_SlowestPlayer].BoolValue);
-				if (StrEqual(items, "tgfastplayerdis"))
+				if (StrEqual(items, "tgfastpdis"))
 				{
 					N_ClientItem[client].WaitingForTgFastPDis = true;
 					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置最大距离 \x03范围[100.0 至 10000.0]", NEKOTAG);
 					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
 				}
-				if (StrEqual(items, "tgslowplayerdis"))
+				if (StrEqual(items, "tgslowpdis"))
 				{
 					N_ClientItem[client].WaitingForTgSlowPDis = true;
 					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置最大距离 \x03范围[100.0 至 10000.0]", NEKOTAG);
@@ -329,10 +343,18 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 					NCvar[CSpecial_Check_IsPlayerBiled].SetBool(!NCvar[CSpecial_Check_IsPlayerBiled].BoolValue);
 				if (StrEqual(items, "tgcheckidleplayer"))
 					NCvar[CSpecial_Check_IsPlayerNotInCombat].SetBool(!NCvar[CSpecial_Check_IsPlayerNotInCombat].BoolValue);
-				if (StrEqual(items, "tgchecktime"))
+				if (StrEqual(items, "tgbiledchecktime"))
 				{
-					N_ClientItem[client].WaitingForTgCheckTime = true;
-					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置的检查间隔 \x03范围[0.1 至 5.0]", NEKOTAG);
+					N_ClientItem[client].WaitingForTgCheckBliedTime = true;
+					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置的检查间隔 \x03范围[0.1 至 2.0]", NEKOTAG);
+					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
+				}
+				if (StrEqual(items, "tgcheckidleplayer"))
+					NCvar[CSpecial_Attack_PlayerNotInCombat].SetBool(!NCvar[CSpecial_Attack_PlayerNotInCombat].BoolValue);
+				if (StrEqual(items, "tgattackidletime"))
+				{
+					N_ClientItem[client].WaitingForTgCheckNotInCombat = true;
+					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置的秒数 \x03范围[3 至 15]", NEKOTAG);
 					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
 				}
 				if (StrEqual(items, "tgfilewr"))

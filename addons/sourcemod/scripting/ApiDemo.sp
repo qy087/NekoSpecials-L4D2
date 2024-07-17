@@ -12,3 +12,8 @@ public Action NekoSpecials_OnStartFirstSpawn()
 {
 	PrintToChatAll("Start First Spawn");
 }
+
+public void OnPluginStart()
+{
+	NekoServerName_ChangeCustomTest("NekoCustomText);
+}

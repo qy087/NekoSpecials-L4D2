@@ -69,10 +69,13 @@
 #define CSpecial_Catch_FastPlayer_CheckDistance	   67
 #define CSpecial_Catch_SlowestPlayer			   68
 #define CSpecial_Catch_SlowestPlayer_CheckDistance 69
-#define CSpecial_CheckGame_Time					   70
-#define CSpecial_Check_IsPlayerNotInCombat		   71
-#define CSpecial_Check_IsPlayerBiled			   72
-#define Cvar_Max								   73
+#define CSpecial_Check_IsPlayerNotInCombat		   70
+#define CSpecial_Check_IsPlayerBiled			   71
+#define CSpecial_Check_IsPlayerBiled_Time		   72
+#define CSpecial_SpawnWay						   73
+#define CSpecial_Attack_PlayerNotInCombat		   74
+#define CSpecial_Attack_PlayerNotInCombat_Time	   75
+#define Cvar_Max								   76
 
 ConVar NCvar[Cvar_Max];
 
@@ -96,17 +99,18 @@ enum struct ClientItem
 	bool WaitingForTgCustomMinDisNor;
 	bool WaitingForTgFastPDis;
 	bool WaitingForTgSlowPDis;
-	bool WaitingForTgCheckTime;
+	bool WaitingForTgCheckBliedTime;
+	bool WaitingForTgCheckNotInCombat;
 
-	char WaitingForTgCustomItem[50];
-	char WaitingForTgTimeType[50];
-	char WaitingForTgCustomWeightItem[50];
-	char WaitingForTgCustomDirChanceItem[50];
-	char WaitingForTgCustomMinDisItem[50];
-	char WaitingForTgCustomMaxDisItem[50];
+	char WaitingForTgCustomItem[80];
+	char WaitingForTgTimeType[80];
+	char WaitingForTgCustomWeightItem[80];
+	char WaitingForTgCustomDirChanceItem[80];
+	char WaitingForTgCustomMinDisItem[80];
+	char WaitingForTgCustomMaxDisItem[80];
 
 	bool InWait(){
-		if (this.WaitingForTgtime || this.WaitingForTgnum || this.WaitingForTgadd || this.WaitingForPnum || this.WaitingForPadd || this.WaitingForTgCustom || this.WaitingForTgCustomWeight || this.WaitingForTgCustomDirChance || this.WaitingForTgCustomMaxDis || this.WaitingForTgCustomMinDis || this.WaitingForTgCustomMaxDisNor || this.WaitingForTgCustomMinDisNor || this.WaitingForTgFastPDis || this.WaitingForTgSlowPDis || this.WaitingForTgCheckTime) return true;
+		if (this.WaitingForTgtime || this.WaitingForTgnum || this.WaitingForTgadd || this.WaitingForPnum || this.WaitingForPadd || this.WaitingForTgCustom || this.WaitingForTgCustomWeight || this.WaitingForTgCustomDirChance || this.WaitingForTgCustomMaxDis || this.WaitingForTgCustomMinDis || this.WaitingForTgCustomMaxDisNor || this.WaitingForTgCustomMinDisNor || this.WaitingForTgFastPDis || this.WaitingForTgSlowPDis || this.WaitingForTgCheckBliedTime || this.WaitingForTgCheckNotInCombat) return true;
 		return false; }
 
 void Reset()
@@ -125,7 +129,8 @@ void Reset()
 	this.WaitingForTgCustomMinDisNor	 = false;
 	this.WaitingForTgFastPDis			 = false;
 	this.WaitingForTgSlowPDis			 = false;
-	this.WaitingForTgCheckTime			 = false;
+	this.WaitingForTgCheckBliedTime		 = false;
+	this.WaitingForTgCheckNotInCombat	 = false;
 	this.WaitingForTgCustomItem			 = NULL_STRING;
 	this.WaitingForTgTimeType			 = NULL_STRING;
 	this.WaitingForTgCustomWeightItem	 = NULL_STRING;
@@ -166,4 +171,6 @@ bool		  IsPlayerLeftCP;
 
 GlobalForward N_Forward_OnSetSpecialsNum, N_Forward_OnSetSpecialsTime, N_Forward_OnStartFirstSpawn;
 
-float		  CheckGameTime;
+float		  CheckBiledTime[MAXPLAYERS + 1], CheckFreeTime[MAXPLAYERS + 1];
+
+int			  CheckNotCombat[MAXPLAYERS + 1];

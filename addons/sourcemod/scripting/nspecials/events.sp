@@ -15,6 +15,15 @@ public Action player_team(Event event, const char[] name, bool dontBroadcast)
 	return Plugin_Continue;
 }
 
+public void OnClientPostAdminCheck(int client)
+{
+	CheckBiledTime[client] = 0.0;
+	CheckFreeTime[client]  = 0.0;
+	CheckNotCombat[client] = 0;
+	N_ClientItem[client].Reset();
+	N_ClientMenu[client].Reset(true);
+}
+
 public void OnPlayerDisconnect(Event hEvent, const char[] sName, bool bDontBroadcast)
 {
 	int client = GetClientOfUserId(hEvent.GetInt("userid"));
@@ -32,6 +41,9 @@ public void OnPlayerDisconnect(Event hEvent, const char[] sName, bool bDontBroad
 		}
 		else
 		{
+			CheckBiledTime[client] = 0.0;
+			CheckFreeTime[client]  = 0.0;
+			CheckNotCombat[client] = 0;
 			N_ClientItem[client].Reset();
 			N_ClientMenu[client].Reset(true);
 			CreateTimer(0.1, Timer_SetMaxSpecialsCount, _, TIMER_FLAG_NO_MAPCHANGE);

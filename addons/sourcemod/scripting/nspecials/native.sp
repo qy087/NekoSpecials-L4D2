@@ -28,8 +28,8 @@ void CheckDifficulty(bool ShowTips = true)
 
 void SetAISpawnInit()
 {
+	SetSpecialSpawnWay(NCvar[CSpecial_SpawnWay].IntValue);
 	SetSpecialAssault(NCvar[CSpecial_Fast_Response].BoolValue);
-
 	SetSpecialSpawnMode(NCvar[CSpecial_Spawn_Mode].IntValue);
 
 	if (NCvar[CSpecial_CanCloseDirector].BoolValue)

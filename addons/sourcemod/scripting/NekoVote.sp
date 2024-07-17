@@ -25,7 +25,6 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	AutoExecConfig_SetFile(PLUGIN_CONFIG);
-	AutoExecConfig_SetCreateFile(true);	   //不需要生成文件请改为false
 
 	NCvar[Neko_CanSwitch]		  = AutoExecConfig_CreateConVar("Neko_CanSwitch", "0", "[0=关|1=开]全局投票开关", _, true, 0.0, true, 1.0);
 	NCvar[Neko_SwitchStatus]	  = AutoExecConfig_CreateConVar("Neko_SwitchStatus", "0", "[0=关|1=开]玩家是否能投票更改插件状态", _, true, 0.0, true, 1.0);

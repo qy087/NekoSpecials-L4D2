@@ -349,7 +349,7 @@ public int SpecialMenuHandler(Menu menu, MenuAction action, int client, int sele
 					PrintToChat(client, "\x05%s \x04请在聊天框输入你想设置的检查间隔 \x03范围[0.1 至 2.0]", NEKOTAG);
 					PrintToChat(client, "\x05%s \x04输入 \x03!cancel \x04即可取消这次操作", NEKOTAG);
 				}
-				if (StrEqual(items, "tgcheckidleplayer"))
+				if (StrEqual(items, "tgattackidleplayer"))
 					NCvar[CSpecial_Attack_PlayerNotInCombat].SetBool(!NCvar[CSpecial_Attack_PlayerNotInCombat].BoolValue);
 				if (StrEqual(items, "tgattackidletime"))
 				{

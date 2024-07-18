@@ -132,7 +132,7 @@ public Menu SpecialMenu(int client)
 
 		if (NCvar[CSpecial_Catch_FastPlayer].BoolValue)
 		{
-			Format(line, sizeof(line), "最快玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_FastPlayer_CheckDistance].FloatValue);
+			Format(line, sizeof(line), "最快玩家与队伍之间相隔最大距离 [%0.1f]", NCvar[CSpecial_Catch_FastPlayer_CheckDistance].FloatValue);
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgfastpdis", line);
 		}
 
@@ -141,7 +141,7 @@ public Menu SpecialMenu(int client)
 
 		if (NCvar[CSpecial_Catch_SlowestPlayer].BoolValue)
 		{
-			Format(line, sizeof(line), "掉队玩家与队伍之间相隔最大距离 [%0.f]", NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].FloatValue);
+			Format(line, sizeof(line), "掉队玩家与队伍之间相隔最大距离 [%0.1f]", NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].FloatValue);
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgslowpdis", line);
 		}
 
@@ -153,7 +153,7 @@ public Menu SpecialMenu(int client)
 
 		if (NCvar[CSpecial_Check_IsPlayerBiled].BoolValue)
 		{
-			Format(line, sizeof(line), "检测被喷胆汁玩家的间隔 [%0.fs]", NCvar[CSpecial_Check_IsPlayerBiled_Time].FloatValue);
+			Format(line, sizeof(line), "检测被喷胆汁玩家的间隔 [%0.1fs]", NCvar[CSpecial_Check_IsPlayerBiled_Time].FloatValue);
 			N_ClientMenu[client].N_MenuSpecialMenu.AddItem("tgbiledchecktime", line);
 		}
 

@@ -246,7 +246,7 @@ public Action ChatListener(int client, const char[] command, int args)
 			else
 			{
 				NCvar[CSpecial_Catch_FastPlayer_CheckDistance].SetFloat(GetCmdArgFloat(1));
-				PrintToChat(client, "\x05%s \x04最快玩家与队伍之间相隔最大距离设置为 \x03%0.f", NEKOTAG, GetCmdArgFloat(1));
+				PrintToChat(client, "\x05%s \x04最快玩家与队伍之间相隔最大距离设置为 \x03%0.1f", NEKOTAG, GetCmdArgFloat(1));
 			}
 		}
 		else if (N_ClientItem[client].WaitingForTgSlowPDis)
@@ -259,7 +259,7 @@ public Action ChatListener(int client, const char[] command, int args)
 			else
 			{
 				NCvar[CSpecial_Catch_SlowestPlayer_CheckDistance].SetFloat(GetCmdArgFloat(1));
-				PrintToChat(client, "\x05%s \x04掉队玩家与队伍之间相隔最大距离设置为 \x03%0.f", NEKOTAG, GetCmdArgFloat(1));
+				PrintToChat(client, "\x05%s \x04掉队玩家与队伍之间相隔最大距离设置为 \x03%0.1f", NEKOTAG, GetCmdArgFloat(1));
 			}
 		}
 		else if (N_ClientItem[client].WaitingForTgCheckBliedTime)
@@ -272,7 +272,7 @@ public Action ChatListener(int client, const char[] command, int args)
 			else
 			{
 				NCvar[CSpecial_Check_IsPlayerBiled_Time].SetFloat(GetCmdArgFloat(1));
-				PrintToChat(client, "\x05%s \x04检查间隔设置为 \x03%0.f", NEKOTAG, GetCmdArgFloat(1));
+				PrintToChat(client, "\x05%s \x04检查间隔设置为 \x03%0.1f", NEKOTAG, GetCmdArgFloat(1));
 			}
 		}
 		else if (N_ClientItem[client].WaitingForTgCheckNotInCombat)

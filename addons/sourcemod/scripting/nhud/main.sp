@@ -221,6 +221,21 @@ public Action RefreshHUD(Handle timer)
 					HUDPlace(HUD_SCORE_1, xy[0], xy[1], 1.0, 0.08);
 				}
 			}
+			case 4:
+			{
+				if (HUDSlotIsUsed(HUD_SCORE_1))
+					RemoveHUD(HUD_SCORE_1);
+				if (HUDSlotIsUsed(HUD_FAR_RIGHT))
+					RemoveHUD(HUD_FAR_RIGHT);
+				if (HUDSlotIsUsed(HUD_FAR_LEFT))
+					RemoveHUD(HUD_FAR_LEFT);
+				if (HUDSlotIsUsed(HUD_FAR_RIGHT))
+					RemoveHUD(HUD_FAR_RIGHT);
+				if (HUDSlotIsUsed(HUD_LEFT_TOP))
+					RemoveHUD(HUD_LEFT_TOP);
+				if (HUDSlotIsUsed(HUD_RIGHT_TOP))
+					RemoveHUD(HUD_RIGHT_TOP);
+			}
 		}
 	}
 	else if (NCvar[CKillHud_HudStyle].IntValue == 4)

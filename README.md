@@ -53,7 +53,7 @@ linux系统输入<br>
 # 插件安装
 1.安装Sourcemod插件平台到1.11+/1.12+最新版本<br>
 2.安装[left4dhooks](https://forums.alliedmods.net/showthread.php?p=2684862)最新版本<br>
-3.(可选)需要投票的安装[nativevotes](https://github.com/sapphonie/sourcemod-nativevotes-updated)最新版本，不需要投票功能的可以忽略这一步<br>
+3.(可选)需要投票的安装[l4d2_nativevote](https://github.com/fdxx/l4d2_nativevote)最新版本，不需要投票功能的可以忽略这一步<br>
 4.下载[插件(点我开始下载)](https://mirror.ghproxy.com/https://github.com/himenekocn/NekoSpecials-L4D2/archive/refs/heads/NS7-SM1.11+.zip)，将插件拖到服务器的left4dead2文件夹中覆盖<br>
 5.启动一次服务器检查是否全部加载
 6.修改插件对应cfg，CFG文件均为自动生成，请先执行第五步

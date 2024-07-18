@@ -77,7 +77,7 @@ HUD内容&服名内容的更改：服务器目录/left4dead2/addons/sourcemod/da
 【插件必备组件】BinHooks.ext 核心拓展<br>
 【插件必备组件】[dhooks](https://forums.alliedmods.net/showthread.php?p=2588686#post2588686) SM1.11-6854后自带，不需要安装<br>
 【插件必备组件】[left4dhooks](https://forums.alliedmods.net/showthread.php?p=2684862)(请手动安装最新版本)<br>
-【插件必备组件】[nativevotes](https://github.com/sapphonie/sourcemod-nativevotes-updated)(请手动安装最新版本，不需要的可以忽略这个)<br>
+【插件必备组件】[l4d2_nativevote](https://github.com/fdxx/l4d2_nativevote)(请手动安装最新版本，不需要的可以忽略这个)<br>
 【插件可选组件】[SourceScramble](https://github.com/nosoop/SMExt-SourceScramble/releases/tag/0.7.1)(插件版HUD需要)<br>
 【多特本体模块】[NekoSpecials](https://himeneko.cn/nekospecials) (可选安装，默认安装)<br>
 【击杀统计模块】[NekoKillHud](https://himeneko.cn/nekospecials) (可选安装，默认安装)<br>

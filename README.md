@@ -18,6 +18,12 @@ Specials plugin that can be customized in real time!<br>
 官网[点我跳转](https://himeneko.cn/nekospecials)<br>
 插件介绍:<br>[[【求生之路2】NEKO多特插件更新内容介绍!]](https://www.bilibili.com/video/BV1Eh411n7op)<br>[[求生之路2 更好的多特与击杀统计插件]](https://www.bilibili.com/video/BV1GN411Z7um)
 
+# 7.0变化
+1.性能优化，新增刷特模式<br>
+2.防跑图掉队机制<br>
+3.更精准的多特控制<br>
+4.代码优化
+
 ## 目录
 - [使用注意](#使用注意)
 - [安装前系统方面的准备](#安装前系统方面的准备)

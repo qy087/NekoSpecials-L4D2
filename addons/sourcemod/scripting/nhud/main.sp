@@ -126,8 +126,8 @@ public Action RefreshHUD(Handle timer)
 				default: ExtendY = 0.04;
 			}
 		}
-		
-		if(PlayerLimit != 8)
+
+		if (PlayerLimit != 8)
 		{
 			if (HUDSlotIsUsed(HUD_LEFT_TOP))
 				RemoveHUD(HUD_LEFT_TOP);
@@ -221,7 +221,7 @@ public Action RefreshHUD(Handle timer)
 					HUDPlace(HUD_SCORE_1, xy[0], xy[1], 1.0, 0.08);
 				}
 			}
-			case 4:
+			default:
 			{
 				if (HUDSlotIsUsed(HUD_SCORE_1))
 					RemoveHUD(HUD_SCORE_1);

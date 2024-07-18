@@ -110,7 +110,7 @@ public void OnPluginStart()
 	NCvar[CSpecial_Check_IsPlayerNotInCombat]		  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerNotInCombat", "0", "[0=关|1=开]禁用/启用在摸鱼的玩家身边刷特[仅供测试]", _, true, 0.0, true, 1.0);
 
 	NCvar[CSpecial_Check_IsPlayerBiled]				  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerBiled", "0", "[0=关|1=开]禁用/启用让某些特感注重攻击被胖子喷一脸的玩家", _, true, 0.0, true, 1.0);
-	NCvar[CSpecial_Check_IsPlayerBiled_Time]		  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerBiled_Time", "2.5", "检查玩家是否被喷一脸的间隔，单位秒，基于OnPlayerRunCmd，间隔越低性能有所消耗，不需要的可以不开该功能[0.1s-2.0s]", _, true, 0.1, true, 2.0);
+	NCvar[CSpecial_Check_IsPlayerBiled_Time]		  = AutoExecConfig_CreateConVar("Special_Check_IsPlayerBiled_Time", "1.5", "检查玩家是否被喷一脸的间隔，单位秒，间隔越低性能消耗越大精度越准确，不需要的可以不开该功能[0.1s-2.0s]", _, true, 0.1, true, 2.0);
 
 	NCvar[CSpecial_Attack_PlayerNotInCombat]		  = AutoExecConfig_CreateConVar("Special_Attack_PlayerNotInCombat", "0", "[0=关|1=开]禁用/启用特感主动攻击摸鱼玩家[仅供测试]", _, true, 0.0, true, 1.0);
 	NCvar[CSpecial_Attack_PlayerNotInCombat_Time]	  = AutoExecConfig_CreateConVar("Special_Attack_PlayerNotInCombat_Time", "6", "检查玩家是否一直处于摸鱼状态，达到指定秒数，将让其中一只特感目标设置为该玩家，Special_Attack_PlayerNotInCombat启用后才生效[3-15秒]", _, true, 3.0, true, 15.0);

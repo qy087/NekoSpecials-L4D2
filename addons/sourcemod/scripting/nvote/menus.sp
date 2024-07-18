@@ -45,7 +45,7 @@ public Menu NekoVoteMenu(int client)
 		Format(line, sizeof(line), "克活着时刷新 [%s]", !GCvar[CSpecial_Spawn_Tank_Alive].BoolValue ? "否" : "是");
 		N_MenuVoteMenu[client].AddItem("tgtanklive", line, !NCvar[Neko_SwitchTankAlive].BoolValue ? ITEMDRAW_DISABLED : itemsflags);
 
-		Format(line, sizeof(line), "特感游戏模式 [%s]", SpecialName[NCvar[CSpecial_Default_Mode].IntValue]);
+		Format(line, sizeof(line), "特感游戏模式 [%s]", SpecialName[GCvar[CSpecial_Default_Mode].IntValue]);
 		N_MenuVoteMenu[client].AddItem("tgmode", line, !NCvar[Neko_SwitchGameMode].BoolValue ? ITEMDRAW_DISABLED : itemsflags);
 
 		Format(line, sizeof(line), "特感刷新模式 [%s]", SpawnModeName[GetSpecialSpawnMode()]);

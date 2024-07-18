@@ -77,7 +77,7 @@ public Action ChatListener(int client, const char[] command, int args)
 			Format(FChar, sizeof FChar, "玩家增加数量");
 		}
 
-		if (GetCmdArgInt(0) < DDMin || GetCmdArgInt(0) > DDMax)
+		if (GetCmdArgInt(1) < DDMin || GetCmdArgInt(1) > DDMax)
 		{
 			PrintToChat(client, "\x05%s \x04输入的%s有误，请重试 \x03范围[%d - %d]", NEKOTAG, FChar, DDMin, DDMax);
 			return Plugin_Continue;
@@ -85,7 +85,7 @@ public Action ChatListener(int client, const char[] command, int args)
 		else
 		{
 			VoteMenuItems[client]	  = WaitForVoteItems[client];
-			VoteMenuItemValue[client] = GetCmdArgInt(0);
+			VoteMenuItemValue[client] = GetCmdArgInt(1);
 			StartVoteYesNo(client);
 		}
 

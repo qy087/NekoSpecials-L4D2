@@ -93,7 +93,7 @@ public Action RefreshHUD(Handle timer)
 			if (NCvar[CKillHud_ShowTankWitch].BoolValue)
 				Format(btnrightline, sizeof(btnrightline), "➣章节: %d 特感 %d 丧尸 %d 女巫 %d 坦克", Neko_GlobalState.Kill_AllInfected, Neko_GlobalState.Kill_AllZombie, Neko_GlobalState.Kill_AllWitch, Neko_GlobalState.Kill_AllTank);
 			else
-				Format(btnrightline, sizeof(btnrightline), "➣章节: %d 特感 %d 丧尸", Neko_GlobalState.Kill_AllInfected, Neko_GlobalState.Kill_AllInfected);
+				Format(btnrightline, sizeof(btnrightline), "➣章节: %d 特感 %d 丧尸", Neko_GlobalState.Kill_AllInfected, Neko_GlobalState.Kill_AllZombie);
 
 			if (NCvar[CKillHud_AllKillStyle2].BoolValue)
 			{

@@ -23,9 +23,9 @@ public Action ChatListener(int client, const char[] command, int args)
 
 	if (BoolWaitForVoteItems[client])
 	{
-		if (!NativeVotes_IsNewVoteAllowed())
+		if (!L4D2NativeVote_IsAllowNewVote())
 		{
-			PrintToChat(client, "\x05%s \x04%d秒后才能开始投票", NEKOTAG, NativeVotes_CheckVoteDelay());
+			PrintToChat(client, "投票正在进行中, 暂不能发起新的投票");
 			cleanplayerwait(client);
 			return Plugin_Continue;
 		}
@@ -79,7 +79,7 @@ public Action ChatListener(int client, const char[] command, int args)
 
 		if (GetCmdArgInt(1) < DDMin || GetCmdArgInt(1) > DDMax)
 		{
-			PrintToChat(client, "\x05%s \x04输入的%s有误，请重试 \x03范围[%d - %d]", NEKOTAG, FChar, DDMin, DDMax);
+			PrintToChat(client, "\x05%s \x04输入的%s有误，您输入的值是%d 请重试 \x03范围[%d - %d]", NEKOTAG, FChar, GetCmdArgInt(1), DDMin, DDMax);
 			return Plugin_Continue;
 		}
 		else
